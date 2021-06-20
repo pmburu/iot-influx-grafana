@@ -19,7 +19,10 @@ env.read_env()
 
 client = None
 dbname = env('dbname')
+token = env('token')
+org = env('org')
 measurement = 'sinwave'
+
 
 def db_exists():
     '''returns True if the database exists'''
