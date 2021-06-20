@@ -1,3 +1,11 @@
+'''
+This is a Python program to simulate an IoT data pipeline
+from a field to database. The assumption made in this program is that
+data is collected by a sensor as a function of time. 
+'''
+
+
+
 from influxdb import InfluxDBClient
 import requests
 
@@ -19,8 +27,6 @@ env.read_env()
 
 client = None
 dbname = env('dbname')
-token = env('token')
-org = env('org')
 measurement = 'sinwave'
 
 
