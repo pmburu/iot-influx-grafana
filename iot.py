@@ -2,6 +2,38 @@
 This is a Python program to simulate an IoT data pipeline
 from a field to database. The assumption made in this program is that
 data is collected by a sensor as a function of time.
+
+In order for this to happen the following pseudo code was followed:
+
+1. Import Key libraries and methods
+-> time --> For time access and conversions
+-> datetime --> For manipulating date and time types
+-> math --> Provides access to mathematical functons defined by the C std
+-> pprint --> Provides pretty printing capabilities
+-> os --> For accessing OS dependent functionality
+-> signal --> Signal handlers for asynchronous events
+-> sys --> System specific parameters and functions
+-> environs --> For hiding sensitive data like passwords and keys
+
+2. Initialzize global variables with both sensitive and common data.
+-> client = None
+-> database name = some name
+-> measurement = some name --> used by influxdb
+
+3. Check whether the database exists. -- use get_list_database method as
+stipulated in the InfluxDBClient class ran in Python.
+
+4. Connect to the server using host and port parameters --> Tweak, retry for
+x times. x = 5
+
+5. Connect to the database using the host and port provided. If the database
+does not exist, create one.
+
+6. Create dummy sensor data and populate the database
+
+7. Show data
+
+
 '''
 
 
