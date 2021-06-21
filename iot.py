@@ -1,7 +1,7 @@
 '''
 This is a Python program to simulate an IoT data pipeline
 from a field to database. The assumption made in this program is that
-data is collected by a sensor as a function of time. 
+data is collected by a sensor as a function of time.
 '''
 
 
@@ -86,10 +86,10 @@ def measure(nmeas):
             'measurement':measurement,
             'time':datetime.datetime.now(),
             'tags': {
-                'x' : x
+                'Corn_Field_Sensor' : x
                 },
                 'fields' : {
-                    'y' : y
+                    'Potatoe_Field_Sensor' : y
                     },
             }]
         client.write_points(data)
