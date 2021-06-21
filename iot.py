@@ -32,8 +32,6 @@ does not exist, create one.
 6. Create dummy sensor data and populate the database
 
 7. Show data
-
-
 '''
 
 
@@ -87,7 +85,7 @@ def server_check(host, port, nretries=5):
     sys.exit(1)
 
 def db_connection(host, port, reset):
-    '''connect to the database, and create it if it does not exist'''
+    '''connect to the database, and create one if it does not exist'''
     global client
     print('connecting to database: {}:{}'.format(host,port))
     client = InfluxDBClient(host, port, retries=5, timeout=1)
@@ -131,7 +129,7 @@ def sensor_data(num_of_measurements):
         time.sleep(1)
 
 def get_entries():
-    '''returns all entries in the database.'''
+    '''returns all data from the database.'''
     results = client.query('select * from {}'.format(measurement))
     # we decide not to use the x tag
     return list(results[(measurement, None)])
