@@ -104,24 +104,26 @@ def db_connection(host, port, reset):
         client.delete_series(measurement=measurement)
 
 
-def sensor_data(nmeas):
-    '''insert dummy measurements to the db.
-    nmeas = 0 means : insert measurements forever.
+def sensor_data(num_of_measurements):
+    '''
+    This is a simulated sensor function to create  sin-based data
+    and insert these measurements to the db.
+    num_of_measurements = 0 means : insert measurements until the end of time.
     '''
     i = 0
-    if nmeas==0:
-        nmeas = sys.maxsize
-    for i in range(nmeas):
+    if num_of_measurements==0:
+        num_of_measurements = sys.maxsize
+    for i in range(num_of_measurements):
         x = i/10.
         y = math.sin(x)
         data = [{
             'measurement':measurement,
             'time':datetime.datetime.now(),
             'tags': {
-                'Corn_Field_Sensor' : x
+                'corn_field_sensor' : x
                 },
                 'fields' : {
-                    'Potatoe_Field_Sensor' : y
+                    'potatoe_field_sensor' : y
                     },
             }]
         client.write_points(data)
@@ -147,7 +149,8 @@ if __name__ == '__main__':
         action='store_true'
         )
     parser.add_option(
-        '-n', '--nmeasurements', dest='nmeasurements',
+        '-n', '--num_of_measurements',
+        dest='num_of_measurements',
         type='int',
         help='reset database',
         default=0
@@ -167,6 +170,6 @@ if __name__ == '__main__':
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
 
-    sensor_data(options.nmeasurements)
+    sensor_data(options.num_of_measurements)
 
     pprint.pprint(get_entries())
