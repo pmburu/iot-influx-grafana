@@ -15,7 +15,7 @@ In order for this to happen the following pseudo code was followed:
 -> sys --> System specific parameters and functions
 -> environs --> For hiding sensitive data like passwords and keys
 
-2. Initialzize global variables with both sensitive and common data.
+2. Initialize global variables with both sensitive and common data.
 -> client = None
 -> database name = some name
 -> measurement = some name --> used by influxdb
@@ -62,7 +62,7 @@ dbname = env('dbname')
 measurement = 'sinwave'
 
 
-def db_exists():
+def check_db():
     '''returns True if the database exists'''
     dbs = client.get_list_database()
     for db in dbs:
@@ -70,7 +70,7 @@ def db_exists():
             return True
     return False
 
-def wait_for_server(host, port, nretries=5):
+def server_check(host, port, nretries=5):
     '''wait for the server to come online for waiting_time, nretries times.'''
     url = 'http://{}:{}'.format(host, port)
     waiting_time = 1
@@ -86,14 +86,14 @@ def wait_for_server(host, port, nretries=5):
     print('cannot connect to', url)
     sys.exit(1)
 
-def connect_db(host, port, reset):
+def db_connection(host, port, reset):
     '''connect to the database, and create it if it does not exist'''
     global client
     print('connecting to database: {}:{}'.format(host,port))
     client = InfluxDBClient(host, port, retries=5, timeout=1)
-    wait_for_server(host, port)
+    server_check(host, port)
     create = False
-    if not db_exists():
+    if not check_db():
         create = True
         print('creating database...')
         client.create_database(dbname)
@@ -104,7 +104,7 @@ def connect_db(host, port, reset):
         client.delete_series(measurement=measurement)
 
 
-def measure(nmeas):
+def sensor_data(nmeas):
     '''insert dummy measurements to the db.
     nmeas = 0 means : insert measurements forever.
     '''
@@ -159,7 +159,7 @@ if __name__ == '__main__':
         print('please specify two arguments')
         sys.exit(1)
     host, port = args
-    connect_db(host, port, options.reset)
+    db_connection(host, port, options.reset)
     def signal_handler(sig, frame):
         print()
         print('stopping')
@@ -167,6 +167,6 @@ if __name__ == '__main__':
         sys.exit(0)
     signal.signal(signal.SIGINT, signal_handler)
 
-    measure(options.nmeasurements)
+    sensor_data(options.nmeasurements)
 
     pprint.pprint(get_entries())
